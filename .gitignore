@@ -1,0 +1,14 @@
+# PlatformIO
+firmware/.pio/
+.pio/
+# ESPHome
+bench/esphome/.esphome/
+bench/esphome/secrets.yaml
+# Python
+__pycache__/
+*.pyc
+.venv/
+# OS / editors
+.DS_Store
+.vscode/
+*.swp

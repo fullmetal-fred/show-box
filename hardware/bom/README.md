@@ -1,0 +1,58 @@
+# Bills of materials
+
+Machine-readable source: [`bom.csv`](bom.csv). This table is generated from it
+(`python3 tools/bom_to_md.py`); edit the CSV, not this file.
+
+`price_status`: **snippet** = from a search-result snippet, not a live page;
+**estimate** = from the original brief; **unverified** = unknown. Treat every
+price as unconfirmed. `TODO` = not chosen yet (no part numbers are invented).
+
+## general-purpose
+
+| Part | Supplier | Part # | Unit cost | Qty | Status | Notes |
+|---|---|---|---|---|---|---|
+| ESP32 PoE controller (isolated) | Olimex | [ESP32-POE-ISO](https://www.olimex.com/Products/IoT/ESP32/ESP32-POE-ISO/) | 24.95 EUR | 1 | snippet | WROOM-32E variant (not WROVER). EUR 22.46 at 10-49. Brief estimated $20; actual ~$27-29 at qty 1 before shipping/VAT. ~1.5 W budget for user circuits. |
+| 4-ch relay module 5V opto-isolated | TODO | TODO | 8.00 USD | 1 | estimate | Active-low Songle SRD-05VDC type. Remove JD-VCC jumper for 3.3 V logic. 4 coils all on is borderline for ISO power budget; see architecture.md. |
+| Alt: I2C relay+input board (4 relays 4 opto inputs) | Olimex | [MOD-IO](https://www.olimex.com/Products/Modules/IO/MOD-IO/open-source-hardware) | 17.95 EUR | 0 | snippet | Alternative to relay module. Needs 8-30 VDC supply. I2C over UEXT. Not selected. |
+| Pluggable terminal block plug 2-pos 5.08mm | Phoenix Contact | [1757019](https://www.digikey.com/en/products/detail/phoenix-contact/1757019/277-1011-ND/260379) | TODO | 6 | unverified | MSTB 2.5/2-ST-5.08. One retailer lists discontinued; confirm or pick successor. |
+| Pluggable terminal block header 2-pos 5.08mm | Phoenix Contact | 1757242 | TODO | 6 | unverified | MSTBA 2.5/2-G-5.08 (or 1759017 MSTB 2.5/2-G-5.08). Needs a carrier/protoboard to mount. |
+| Enclosure | Hammond | [1591DSBK](https://www.hammfg.com/part/1591DSBK) | 8.78 USD | 1 | snippet | 150x80x50 mm IP54. Fit not verified against actual boards. 1555NGY (120x120x61) is the roomier alternative. |
+| Fuse holder + fuse / standoffs / wire / hardware | TODO | TODO | 5.00 USD | 1 | estimate |  |
+
+## ringer
+
+| Part | Supplier | Part # | Unit cost | Qty | Status | Notes |
+|---|---|---|---|---|---|---|
+| ESP32 PoE controller (25 W) | Olimex | [ESP32-POE2](https://olimex.wordpress.com/2024/04/25/esp32-poe2-open-source-hardware-poe-iot-board-provides-up-to-25w-power-supply-to-external-circuits/) | 20.95 EUR | 1 | snippet | Candidate A. 802.3at up to 25 W; 12 V/1.5 A rail. NOT isolated. WROVER-E (RMII clock on GPIO0). Needs 802.3at PSE. Alternative: ESP32-POE-ISO + external supply. |
+| Ring generator option 1: ringing SLIC module | Silvertel | [Ag1171-S](https://www.newark.com/silvertel/ag1171-s/subscriber-line-interface-circuit/dp/08AM1737) | 8.76 USD | 1 | snippet | 3.3-5 V in. ~60 Vrms into 1 REN. Software frequency/cadence via RM and F/R. NOT isolated: needs isolated DC/DC + isolated control lines. |
+| Ring generator option 2: Black Magic ring generator 12 V | Cambridge Electronics Labs | [TODO (LR12 sine or 12 V square variant)](https://www.camblab.com/oem_list/oem_list.htm) | 31.00 USD | 1 | snippet | ~$31 square / ~$39 LR12 sine. ~86 Vrms ~5 REN. NOT isolated. Not short protected: needs >=300 ohm series R. |
+| Isolated DC/DC converter (ring side supply) | TODO | TODO | TODO | 1 | unverified | >=1.5 kV isolation (3 kV preferred). 5V->5V for Ag1171 or 12V->12V for Black Magic. Size for peak ringing current. |
+| Control isolation: 2-ch digital isolator or optocouplers | TODO | TODO | TODO | 1 | unverified | For Ag1171 RM and F/R (+ hook detect back). >=2.5 kVrms. Not needed if Black Magic gated by relay. |
+| Gate relay (signal relay) | TODO | TODO | 3.00 USD | 1 | estimate | Gates ring module DC input (Black Magic path). Check coil-contact isolation rating. |
+| Series current-limit resistor | TODO | TODO | TODO | 2 | unverified | Value TBD on bench (>=300 ohm total for Black Magic). Power rating for continuous short. |
+| Fuse or PTC on ring output | TODO | TODO | TODO | 1 | unverified | Value TBD on bench. |
+| Ring output connector (panel) | Neutrik | [NL4MPXX](https://www.neutrik.com/en/product/nl4mpxx) | TODO | 1 | unverified | speakON panel. Proposed; see safety.md. Alternative: Hirschmann SEB 2620 4 mm shrouded sockets 972356101/972356100. |
+| Phone adapter cable (speakON to prop phone) | TODO | TODO | TODO | 1 | unverified | Built in-house. |
+| Lid momentary pushbutton 16 mm | E-Switch | [PV6F240SS-341](https://spemco.com/pv6f240ss-341-anti-vandal-push-button-switch-16-mm-illuminated-blue-ring-momentary-off-on/) | TODO | 1 | snippet | Anti-vandal momentary. Alt: APEM AV series (AV0630C940K unverified). |
+| Enclosure + insulating barrier | Hammond | TODO | 18.00 USD | 1 | estimate | Needs room for HV zone separation. |
+| Fuse / wiring / hardware | TODO | TODO | 7.00 USD | 1 | estimate |  |
+
+## bench
+
+| Part | Supplier | Part # | Unit cost | Qty | Status | Notes |
+|---|---|---|---|---|---|---|
+| PoE injector or PoE switch (802.3at) | TODO | TODO | TODO | 1 | unverified | 802.3at needed to test ESP32-POE2 at >13 W. |
+| Second controller for comparison | Olimex | [ESP32-POE-ISO](https://www.olimex.com/Products/IoT/ESP32/ESP32-POE-ISO/) | 24.95 EUR | 1 | snippet | Test both boards. |
+| USB-serial cable / micro-USB cable | TODO | TODO | TODO | 1 | unverified | Never connect USB to POE2 while on PoE. |
+| Logic analyzer (8 ch) | TODO | TODO | TODO | 1 | unverified | Boot glitch and timing tests. |
+| True-RMS multimeter | TODO | TODO | TODO | 1 | unverified | Ring voltage and isolation checks. |
+| Vintage phones (WE 500 C4A ringer + 1-2 others incl. UK if possible) | TODO | TODO | TODO | 2 | unverified | Ideally one known harmonic ringer as a negative test. |
+| Protoboard / jumpers / 12 V bench supply | TODO | TODO | TODO | 1 | unverified |  |
+
+## Cost notes
+
+- The brief estimated the Olimex board at ~$20. It's about EUR 25 at qty 1
+  (~EUR 22.50 at 10+), before VAT and shipping.
+- The ringer needs an isolated DC/DC converter and control isolation that the
+  brief's estimate didn't include. Expect ringer parts at the top of the
+  $75-85 range or above until those are priced.

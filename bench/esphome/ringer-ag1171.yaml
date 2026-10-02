@@ -1,0 +1,58 @@
+# Silvertel Ag1171 ringing SLIC behind an isolated 5 V DC/DC and a digital
+# isolator. Pin names RM and F/R from the Ag1171 datasheet [verify the exact
+# ringing procedure before powering]. Question B in docs/phase1-bench-plan.md.
+#
+# Ringing = RM high + F/R toggled at the ring frequency (20 Hz NA, 25 Hz UK/EU).
+esphome:
+  name: showbox-ringer-ag1171
+
+packages:
+  board: !include common-poe-iso.yaml
+  cadences: !include ringer-cadences.yaml
+
+switch:
+  - platform: gpio
+    id: ag_rm
+    name: "Ag1171 RM"
+    pin: GPIO4
+    restore_mode: ALWAYS_OFF
+    internal: true
+
+output:
+  # F/R square wave. GPIO32 broken out? [verify on schematic]; else pick another boot-safe pin.
+  - platform: ledc
+    id: ag_fr
+    pin: GPIO32
+    frequency: 20Hz
+
+number:
+  # Bench knob: ring frequency 16-60 Hz (harmonic ringer experiments).
+  - platform: template
+    id: ring_freq
+    name: "Ring Frequency Hz"
+    min_value: 16
+    max_value: 60
+    step: 1
+    initial_value: 20
+    optimistic: true
+    set_action:
+      - lambda: id(ag_fr).update_frequency(x);
+
+script:
+  - id: ring_on
+    then:
+      - output.set_level: { id: ag_fr, level: 50% }
+      - switch.turn_on: ag_rm
+  - id: ring_off
+    then:
+      - switch.turn_off: ag_rm
+      - output.turn_off: ag_fr
+
+# Hook detect (SHK) through the isolator: wire and test per bench plan 5b.7.
+# binary_sensor:
+#   - platform: gpio
+#     id: hook
+#     name: "Off Hook"
+#     pin: GPIO<TBD>
+#     on_press:
+#       - script.execute: ring_stop_all

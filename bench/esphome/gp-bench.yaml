@@ -1,0 +1,68 @@
+# Phase 1 relay bench. Question A in docs/phase1-bench-plan.md.
+# Relays: active-low Songle-type module, JD-VCC jumper removed (5 V to JD-VCC, 3.3 V to VCC).
+esphome:
+  name: showbox-gp-bench
+
+packages:
+  board: !include common-poe-iso.yaml
+
+switch:
+  - platform: gpio
+    id: relay_1
+    name: "Relay 1"
+    pin: { number: GPIO4, inverted: true }
+    restore_mode: ALWAYS_OFF
+  - platform: gpio
+    id: relay_2
+    name: "Relay 2"
+    pin: { number: GPIO13, inverted: true }
+    restore_mode: ALWAYS_OFF
+  - platform: gpio
+    id: relay_3
+    name: "Relay 3"
+    pin: { number: GPIO16, inverted: true }
+    restore_mode: ALWAYS_OFF
+
+# Default-length pulses (500 ms). The proxy maps /relay/n/pulse <ms> onto
+# on + timed off itself, so arbitrary lengths work without more buttons here.
+button:
+  - platform: template
+    id: relay_1_pulse
+    name: "Relay 1 Pulse"
+    on_press:
+      - switch.turn_on: relay_1
+      - delay: 500ms
+      - switch.turn_off: relay_1
+  - platform: template
+    id: relay_2_pulse
+    name: "Relay 2 Pulse"
+    on_press:
+      - switch.turn_on: relay_2
+      - delay: 500ms
+      - switch.turn_off: relay_2
+  - platform: template
+    id: relay_3_pulse
+    name: "Relay 3 Pulse"
+    on_press:
+      - switch.turn_on: relay_3
+      - delay: 500ms
+      - switch.turn_off: relay_3
+
+# Input 1: contact to GND on GPIO36 (input-only, needs EXTERNAL 10k pull-up to 3.3 V).
+# On close, send the raw OSC packet "/go" to QLab:53000.
+# QLab must allow Control without passcode (workspace settings) for this to work.
+# [verify] udp component syntax against the pinned ESPHome version.
+udp:
+  addresses: [!secret qlab_ip]
+  port: 53000
+
+binary_sensor:
+  - platform: gpio
+    id: input_1
+    name: "Input 1"
+    pin: { number: GPIO36, inverted: true }
+    filters:
+      - delayed_on_off: 20ms
+    on_press:
+      # OSC message "/go", no args: "/go\0" + ",\0\0\0"
+      - udp.write: [0x2F, 0x67, 0x6F, 0x00, 0x2C, 0x00, 0x00, 0x00]

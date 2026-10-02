@@ -1,0 +1,161 @@
+# Shared ring cadences (docs/ringer.md). Requires the including config to define
+# scripts `ring_on` and `ring_off`. One script runs at a time; any new ring
+# restarts (matches protocol.md semantics), Stop always wins.
+globals:
+  - id: ring_continuous
+    type: bool
+    initial_value: "false"
+
+script:
+  - id: ring_stop_all
+    then:
+      - lambda: id(ring_continuous) = false;
+      - script.stop: cad_us
+      - script.stop: cad_uk
+      - script.stop: cad_short
+      - script.stop: cad_us_double
+      - script.stop: ring_watchdog
+      - script.execute: ring_off
+
+  # Safety limit: stop after 120 s no matter what.
+  - id: ring_watchdog
+    mode: restart
+    then:
+      - delay: 120s
+      - script.execute: ring_stop_all
+
+  - id: cad_us          # 2.0 on / 4.0 off
+    mode: restart
+    then:
+      - while:
+          condition:
+            lambda: return true;
+          then:
+            - script.execute: ring_on
+            - delay: 2000ms
+            - script.execute: ring_off
+            - delay: 4000ms
+            - if:
+                condition:
+                  lambda: return !id(ring_continuous);
+                then:
+                  - script.execute: ring_stop_all
+
+  - id: cad_uk          # 0.4 on / 0.2 off / 0.4 on / 2.0 off
+    mode: restart
+    then:
+      - while:
+          condition:
+            lambda: return true;
+          then:
+            - script.execute: ring_on
+            - delay: 400ms
+            - script.execute: ring_off
+            - delay: 200ms
+            - script.execute: ring_on
+            - delay: 400ms
+            - script.execute: ring_off
+            - delay: 2000ms
+            - if:
+                condition:
+                  lambda: return !id(ring_continuous);
+                then:
+                  - script.execute: ring_stop_all
+
+  - id: cad_short       # 1.0 on / 2.0 off
+    mode: restart
+    then:
+      - while:
+          condition:
+            lambda: return true;
+          then:
+            - script.execute: ring_on
+            - delay: 1000ms
+            - script.execute: ring_off
+            - delay: 2000ms
+            - if:
+                condition:
+                  lambda: return !id(ring_continuous);
+                then:
+                  - script.execute: ring_stop_all
+
+  - id: cad_us_double   # 0.8 on / 0.4 off / 0.8 on / 4.0 off
+    mode: restart
+    then:
+      - while:
+          condition:
+            lambda: return true;
+          then:
+            - script.execute: ring_on
+            - delay: 800ms
+            - script.execute: ring_off
+            - delay: 400ms
+            - script.execute: ring_on
+            - delay: 800ms
+            - script.execute: ring_off
+            - delay: 4000ms
+            - if:
+                condition:
+                  lambda: return !id(ring_continuous);
+                then:
+                  - script.execute: ring_stop_all
+
+button:
+  - platform: template
+    id: ring_stop
+    name: "Ring Stop"
+    on_press:
+      - script.execute: ring_stop_all
+  - platform: template
+    id: ring_once_us
+    name: "Ring Once US"
+    on_press:
+      - script.execute: ring_stop_all
+      - script.execute: ring_watchdog
+      - script.execute: cad_us
+  - platform: template
+    id: ring_start_us
+    name: "Ring Start US"
+    on_press:
+      - script.execute: ring_stop_all
+      - lambda: id(ring_continuous) = true;
+      - script.execute: ring_watchdog
+      - script.execute: cad_us
+  - platform: template
+    id: ring_once_uk
+    name: "Ring Once UK"
+    on_press:
+      - script.execute: ring_stop_all
+      - script.execute: ring_watchdog
+      - script.execute: cad_uk
+  - platform: template
+    id: ring_start_uk
+    name: "Ring Start UK"
+    on_press:
+      - script.execute: ring_stop_all
+      - lambda: id(ring_continuous) = true;
+      - script.execute: ring_watchdog
+      - script.execute: cad_uk
+  - platform: template
+    id: ring_start_short
+    name: "Ring Start Short"
+    on_press:
+      - script.execute: ring_stop_all
+      - lambda: id(ring_continuous) = true;
+      - script.execute: ring_watchdog
+      - script.execute: cad_short
+  - platform: template
+    id: ring_start_us_double
+    name: "Ring Start US Double"
+    on_press:
+      - script.execute: ring_stop_all
+      - lambda: id(ring_continuous) = true;
+      - script.execute: ring_watchdog
+      - script.execute: cad_us_double
+  - platform: template
+    id: ring_start_steady
+    name: "Ring Start Steady"
+    on_press:
+      - script.execute: ring_stop_all
+      - script.execute: ring_watchdog
+      - script.execute: ring_on

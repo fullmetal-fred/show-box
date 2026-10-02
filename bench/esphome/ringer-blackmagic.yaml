@@ -1,0 +1,26 @@
+# Cambridge Electronics Labs "Black Magic" 12 V ring generator, DC input gated
+# by a relay (coil on logic side, contact on the isolated 12 V ring side).
+# >= 300 ohm series resistance on the output is REQUIRED (module is not
+# short-protected). Question B in docs/phase1-bench-plan.md.
+esphome:
+  name: showbox-ringer-bm
+
+packages:
+  board: !include common-poe-iso.yaml
+  cadences: !include ringer-cadences.yaml
+
+switch:
+  - platform: gpio
+    id: ring_gate
+    name: "Ring Gate"
+    pin: { number: GPIO4, inverted: true }   # active-low relay module
+    restore_mode: ALWAYS_OFF
+    internal: true
+
+script:
+  - id: ring_on
+    then:
+      - switch.turn_on: ring_gate
+  - id: ring_off
+    then:
+      - switch.turn_off: ring_gate
