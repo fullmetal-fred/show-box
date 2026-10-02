@@ -60,9 +60,10 @@ supplies. Candidate architectures **[open], decided on the bench**:
 | **A. Olimex ESP32-POE2** | 802.3at, up to 25 W, jumper-selectable 12 V/1.5 A or 24 V/0.75 A rail, plus 5 V/1.5 A | One board, 12 V rail drives relay coils and ring generator directly | **Not isolated** (PoE side to board ground); WROVER-E module, so the RMII clock is on GPIO0 **[verify]**; needs an 802.3at switch or injector for >13 W; no USB while on PoE |
 | B. ESP32-POE-ISO + external DC supply for loads | Wall-wart / DIN PSU for coils and ringer | Keeps ISO board; isolation easy to reason about | Two power cords, so the box is no longer "PoE powered" |
 | C. Isolated 802.3at PoE splitter (12 V out) + non-PoE ESP32 Ethernet board | Splitter feeds everything | Off-the-shelf isolated PoE; plenty of power | Extra module, more wiring; splitter quality varies |
+| D. **Waveshare ESP32-S3-POE-ETH-8DI-8RO** (Relay SKU) | All-in-one: 802.3af PoE, 8 relays, 8 opto inputs, DIN case, ~$50 | Nearly the whole Relay SKU off the shelf; DIN look for free | Different MCU (ESP32-S3) and Ethernet chip (W5500 over SPI), so a second board port; 8 coils on 802.3af and PoE isolation **[verify]**; no board-level FCC found; less of our own value-add in the hardware |
 
-Current lean: **A for Relay and Ringer, ISO for Input and 2-relay General
-Purpose**, with an isolated DC/DC module on the ringer's high-voltage side
+Current lean: **ISO for Input and 2-relay General Purpose; A for the Ringer;
+A or D for Relay (bench both)**, with an isolated DC/DC module on the ringer's high-voltage side
 regardless (see [safety.md](safety.md)). Medium confidence. The firmware
 doesn't care: board choice is a per-SKU pin map.
 

@@ -49,6 +49,28 @@ price as unconfirmed. `TODO` = not chosen yet (no part numbers are invented).
 | Vintage phones (WE 500 C4A ringer + 1-2 others incl. UK if possible) | TODO | TODO | TODO | 2 | unverified | Ideally one known harmonic ringer as a negative test. |
 | Protoboard / jumpers / 12 V bench supply | TODO | TODO | TODO | 1 | unverified |  |
 
+## din
+
+| Part | Supplier | Part # | Unit cost | Qty | Status | Notes |
+|---|---|---|---|---|---|---|
+| DIN clip for Olimex ESP32-POE / POE-ISO / POE2 | Olimex | [DIN-CLIP-ESP32-POE](https://www.olimex.com/Products/IoT/ESP32/DIN-CLIP-ESP32-POE/) | 5.95 EUR | 1 | snippet | Cheapest DIN path: keeps baseline board. EUR 5.65 at 10+. |
+| All-in-one: ESP32-S3 + 802.3af PoE + 8 relays + 8 opto inputs in DIN case | Waveshare | [ESP32-S3-POE-ETH-8DI-8RO](https://www.waveshare.com/wiki/ESP32-S3-ETH-8DI-8RO) | 49.99 USD | 1 | snippet | Candidate for the Relay SKU. W5500 SPI Ethernet (firmware port needed). Relays 10 A 250 VAC. 7-36 VDC alt input. Module FCC ID 2AC7Z-ESPS3WROOM1; no board-level FCC found. PoE headroom and isolation unverified. |
+| 8-relay ESP32 board with LAN8720 Ethernet (12 V supply; no PoE) | KinCony | [KC868-A8](https://shop.kincony.com/products/kc868-a8-esp32-8-channel-relay-module) | 67.00 USD | 1 | snippet | $55 bare / $67 with DIN-mountable shell. Same PHY as Olimex. Needs 12 VDC. |
+| 16-relay ESP32 PoE DIN controller | KinCony | [E16P](https://shop.kincony.com/products/kincony-e16p-16ch-esp32-poe-ethernet-relay-module) | 198.00 USD | 0 | snippet | Only KinCony PoE option found (optional 12 V PoE module; class unverified). Too big for current SKUs. |
+| DIN interface relay 5 V coil 1CO 6 A | Phoenix Contact | [1119897](https://www.rspsupply.com/p-68447) | 16.00 USD | 4 | snippet | PLC-RSC-5DC/21. 38 mA coil: needs transistor/ULN2803 driver. ~$16-19.50 each. |
+| DIN interface relay 5 V coil 1CO | Weidmuller | [1122740000](https://eshop.weidmueller.com/en/trs-5vdc-1co/p/1122740000) | TODO | 4 | unverified | TRS 5VDC 1CO. Coil current unverified. 24 V version 1122770000 ($10.70-15.90). |
+| DIN interface relay 12 V coil 1CO 6 A | Finder | [38.51.0.012.0060](https://www.newark.com/finder/38-51-0-012-0060/dp/08X7068) | 18.04 USD | 4 | snippet | For 12 V-rail SKUs (ESP32-POE2). ~0.5 W coil. |
+| Push-in DIN terminal block 2.5 mm2 | Phoenix Contact | [3209510](https://www.rspsupply.com/p-18036) | 1.60 USD | 10 | snippet | PT 2.5. 24 A / 800 V. Plus end plates/jumpers TODO. |
+| Screw DIN terminal block 2.5 mm2 | Phoenix Contact | [3044076](https://www.rspsupply.com/p-1621) | 1.15 USD | 10 | snippet | UT 2.5. Alternative to PT. |
+| Push-in DIN terminal block 2-conductor | WAGO | [2002-1201](https://www.lesman.com/2002-1201) | 1.77 USD | 10 | snippet | TOPJOB S. 20 A / 600 V. |
+| Modular DIN enclosure 4-module | Hammond | [1597DIN4GY](https://www.rapidonline.com/) | 6.73 GBP | 1 | snippet | UL94-V0. Clips onto a rail; customer needs a rail/cabinet. 6-module 1597DIN6GY GBP 9.09. |
+| Modular DIN enclosure kit 4-module | CamdenBoss | [CNMB/4/KIT](https://www.rapidonline.com/) | 10.25 GBP | 1 | snippet | $11.84 at DigiKey. Extended height CNMB/4/E. |
+| Modular DIN enclosure 4M | Italtronic | [25.0401000.BL](https://www.tme.com/) | 6.31 USD | 1 | snippet | Modulbox XTS. 6M 25.0601000.BL $7.93. |
+| Portable surface box with internal 35 mm rail (4 modules) | Schneider Electric | MIP10104 | 19.00 EUR | 1 | snippet | Mini Pragma IP40. Breaker-panel look; for shelf/flat mounting. List ~EUR 42. |
+| Portable enclosure with moulded DIN tabs | Hammond | [1554V2GYSL](https://www.hammfg.com/electronics/small-case/plastic/1554) | TODO | 1 | unverified | 239x160x90 mm IP66. Rail mounting tabs in most 1554/1555 sizes. |
+| DIN PoE splitter 802.3at in / 12 or 24 V out / 25 W | Planet | IPOE-162S | 96.00 USD | 0 | snippet | Option C power path (architecture.md). Expensive; $44 listings may be non-DIN POE-162S. |
+| DIN PoE splitter 802.3at in / 12 V 20 W | E-link | LNK-SPT12V | TODO | 0 | unverified | Cheaper option C candidate. |
+
 ## Cost notes
 
 - The brief estimated the Olimex board at ~$20. It's about EUR 25 at qty 1

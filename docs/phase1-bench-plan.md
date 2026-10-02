@@ -21,6 +21,8 @@ Nothing built here ships.
 From [bom.csv](../hardware/bom/bom.csv), `bench` and candidate rows:
 
 - [ ] 2× Olimex ESP32-POE-ISO (**WROOM**, not WROVER), 1× Olimex ESP32-POE2
+- [ ] 1× Waveshare ESP32-S3-POE-ETH-8DI-8RO (Relay SKU candidate D; ~$50)
+- [ ] 1× Olimex DIN-CLIP-ESP32-POE (DIN polish path; €5.95)
 - [ ] 802.3at PoE switch or injector (for POE2 at full power); a plain 802.3af one is fine for ISO
 - [ ] 4-ch 5 V relay module (Songle type) + 1-ch 12 V relay module
 - [ ] MCP23017 breakout (optional in phase 1; needed for the boot-glitch comparison)
@@ -96,6 +98,15 @@ calls (see `bench/osc-proxy/README.md`). In QLab 5:
    Record rail sag and board temperature after 10 min.
 
 Pass/fail: no resets, rail ≥ 4.75 V (5 V) / ≥ 11.4 V (12 V) under worst case.
+
+### 3b. Waveshare 8DI-8RO (Relay SKU candidate)
+
+1. On 802.3af PoE, energize 1→8 relays; watch for resets and measure
+   temperature after 10 min with all 8 on.
+2. Continuity/isolation: PoE input to relay contacts and to the opto input
+   side. Is the PoE stage isolated? (Determines how it compares to the ISO board.)
+3. Boot-glitch test (section 4) on its relay outputs.
+4. Ethernet: boot-to-ping time with W5500 (compare with LAN8720).
 
 ## 4. Boot-glitch test (safety-critical)
 
@@ -222,3 +233,14 @@ Decisions the bench can't make. Collected from all docs.
 13. **Security:** v1 has no auth on the show network. Acceptable, or add an optional passcode before v1?
 14. **Sales regions** until CE/UKCA is understood: US-only? ([compliance.md](compliance.md))
 15. **Name:** replace `showbox` before anything public (trademark search).
+16. **Relay SKU on a Waveshare all-in-one board?** About $50 off the shelf
+    with PoE, 8 relays, 8 inputs and a DIN case. It's cheaper and faster to
+    build, but our hardware value-add gets thin (we'd be selling firmware, test,
+    docs, and show files on someone else's board), and we'd support a second MCU.
+17. **GP/Input differentiation vs ShowIO** (~$200, native OSC, 4 in / 4 out,
+    per one blog snippet): what's the sharper reason to buy ours?
+    ([competitive-landscape.md](competitive-landscape.md))
+18. **Escape-room integrations:** do Input-box buyers need MQTT or
+    Houdini/Clue Control support rather than OSC/HTTP?
+19. **Ringer price:** comparable manual units with cadence + wireless are
+    $230–266. Lean $249 instead of $199?
