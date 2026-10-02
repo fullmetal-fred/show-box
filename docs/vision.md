@@ -50,6 +50,31 @@ Each box:
 - Has a small built-in web page for setup and manual testing.
 - Ships with an example QLab workspace with commented, ready-to-copy cues.
 
+## Positioning
+
+**We make appliances, not a platform.** One box, one job, plain OSC/HTTP, no
+software to install. If you can type `/ring/start` into a QLab network cue, you
+can use it. Competitors are building platforms (custom hardware + config
+software + protocol extensions). We don't compete on breadth. See
+[competitive-landscape.md](competitive-landscape.md).
+
+- **No custom protocol.** Plain OSC and HTTP only ([ADR-0011](decisions/0011-no-custom-protocol.md)).
+- **Launch order:**
+  1. **Ringer** (flagship). Nobody who speaks show control makes one. The
+     manual ringers are sold mostly to vintage phone collectors, with theater
+     as a side market.
+  2. **General Purpose** and **Input**, pitched as "same simple protocol, more I/O."
+  3. **Relay** (8-ch), once the power architecture is settled.
+
+  *Tradeoff:* the Ringer has the clearest market gap, but it's also the hardest
+  SKU to ship: high-voltage isolation, the tightest power budget, the most
+  compliance questions, and the most liability. Leading with it means the
+  first product carries the most risk, and it gates revenue on the slowest
+  path. Building GP units in parallel on the same firmware (which will exist
+  anyway) is a cheap hedge.
+- **Serviceable by design.** Known-vendor, documented modules that a theater
+  can swap mid-run (low-voltage side only; [ADR-0010](decisions/0010-defer-custom-pcb.md)).
+
 ## Principles (in priority order)
 
 1. **A dead box never takes down the show or another box.** Standalone devices,

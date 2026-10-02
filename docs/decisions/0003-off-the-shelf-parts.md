@@ -2,6 +2,7 @@
 
 - Status: Accepted
 - Date: 2026-10-02
+- Extended by: [0010](0010-defer-custom-pcb.md) (when to revisit a custom PCB; DIN-rail polish path; serviceability limits)
 
 ## Context
 

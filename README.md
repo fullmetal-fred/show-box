@@ -17,7 +17,7 @@ The goal is boring reliability. Fire a cue, a relay clicks, a phone rings.
 | **General Purpose** | 2–4 dry-contact relays, a couple of digital inputs and outputs | Phase 1 bench |
 | **Relay** | 8 relay channels (screens, curtains, effects) | Planned |
 | **Input** | 8–12 contact-closure inputs that fire OSC/HTTP at QLab | Planned |
-| **Ringer** (flagship) | Rings a real analog telephone bell from a cue, or from a button on the lid | Phase 1 bench |
+| **Ringer** (flagship, launches first) | Rings a real analog telephone bell from a cue, or from a button on the lid | Phase 1 bench |
 | Audio | Small audio output box | Someday, out of scope |
 
 ## How you use it (target experience)
@@ -34,7 +34,8 @@ single source of truth for OSC and HTTP addresses.
 
 ```
 docs/                 Product and engineering docs
-  vision.md           What we're building and for whom
+  vision.md           What we're building, for whom, and positioning
+  competitive-landscape.md  Competitors and market gap
   architecture.md     Hardware + firmware architecture
   protocol.md         OSC / HTTP command reference (source of truth)
   ringer.md           Ringer box: electrical specs, cadences, module candidates

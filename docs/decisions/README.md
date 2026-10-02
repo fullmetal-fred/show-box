@@ -16,5 +16,7 @@ Statuses: **Proposed** (awaiting owner sign-off) · **Accepted** · **Superseded
 | [0007](0007-open-source.md) | Open hardware and open firmware; sell the assembled unit | Accepted |
 | [0008](0008-licensing.md) | License choices: CERN-OHL-S-2.0 / MPL-2.0 / CC BY-SA 4.0 | **Proposed** |
 | [0009](0009-safe-defaults-and-network-loss.md) | Everything off at boot; configurable network-loss behavior | Accepted (relay default Proposed) |
+| [0010](0010-defer-custom-pcb.md) | Defer custom PCB; DIN-rail modules as the polish path | Accepted (deferred, not rejected) |
+| [0011](0011-no-custom-protocol.md) | Plain OSC and HTTP only; no custom protocol or OSC extension | Accepted |
 
 Template: [0000-template.md](0000-template.md).
